@@ -1,22 +1,21 @@
-const jwt = require('express-jwt');
+const jwt = require("express-jwt");
 
-const getTokenFromHeader = (req) => {
+const getTokenFromHeader = req => {
+  return req.headers.authorization || null;
+};
 
-    return req.headers.authorization || null;
-}
-
-const secret = process.env.SECRET;
+const secret = require("../config").SECRET;
 
 const auth = {
-    required: jwt({
-        secret: secret,
-        getToken: getTokenFromHeader
-    }),
-    optional: jwt({
-        secret: secret,
-        credentialsRequired: false,
-        getToken: getTokenFromHeader
-    })
-}
+  required: jwt({
+    secret: secret,
+    getToken: getTokenFromHeader
+  }),
+  optional: jwt({
+    secret: secret,
+    credentialsRequired: false,
+    getToken: getTokenFromHeader
+  })
+};
 
 module.exports = auth;

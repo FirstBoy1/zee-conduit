@@ -3,7 +3,7 @@ const uniqueValidator = require("mongoose-unique-validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const secret = process.env.SECRET;
+const secret = require("../config").SECRET;
 
 const UserSchema = new mongoose.Schema(
   {
@@ -54,7 +54,6 @@ UserSchema.methods.toProfileJSONFor = function(user) {
   return { username, bio, image, following };
 };
 
-
 UserSchema.methods.generateJWT = function() {
   return jwt.sign({ id: this._id, username: this.username }, secret, {
     expiresIn: "1d"
@@ -62,30 +61,30 @@ UserSchema.methods.generateJWT = function() {
 };
 
 UserSchema.methods.favorite = async function(id) {
-  if(this.favorites.indexOf(id) === -1) {
+  if (this.favorites.indexOf(id) === -1) {
     this.favorites.push(id);
   }
 
   return await this.save();
-}
+};
 
 UserSchema.methods.unfavorite = async function(id) {
   this.favorites.remove(id);
   return await this.save();
-}
+};
 
 UserSchema.methods.follow = async function(id) {
-  if(this.following.indexOf(id) === -1) {
+  if (this.following.indexOf(id) === -1) {
     this.following.push(id);
   }
 
   return await this.save();
-}
+};
 
 UserSchema.methods.unfollow = async function(id) {
   this.following.remove(id);
   return await this.save();
-}
+};
 
 UserSchema.methods.isFollowing = function(id) {
   return this.following.some(user => user._id.toString() === id.toString());

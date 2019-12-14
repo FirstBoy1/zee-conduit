@@ -15,7 +15,9 @@ prod(app);
 
 dotenv.config();
 
-mongoose.connect(process.env.MONGODB_URI, {
+console.log('=====================>>>>>>>>>>>>>>' + process.env.NODE_ENV);
+
+mongoose.connect(require('./config').MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
